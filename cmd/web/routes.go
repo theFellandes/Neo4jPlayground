@@ -14,6 +14,8 @@ const (
 	TASK_PATH        = "/neo/v1/tasks"
 	TASK_WITH_TITLE  = "/neo/v1/tasks/{title}"
 	ASSIGN_PATH      = "/neo/v1/assign"
+	ASSIGNED_TASKS   = "/neo/v1/assigned-tasks/{title}"
+	ASSIGNED_PERSONS = "/neo/v1/assigned-persons/{name}"
 )
 
 func Routes(conf *config.Conf) {
@@ -29,6 +31,8 @@ func Routes(conf *config.Conf) {
 	route.HandleFunc(TASK_WITH_TITLE, services.DeleteTasks).Methods(http.MethodDelete)
 
 	route.HandleFunc(ASSIGN_PATH, services.AssignTask).Methods(http.MethodPost)
+	route.HandleFunc(ASSIGNED_TASKS, services.GetTasksForPerson).Methods(http.MethodGet)
+	route.HandleFunc(ASSIGNED_PERSONS, services.GetPersonsForTask).Methods(http.MethodGet)
 
 	// Start the server and handle any potential errors
 	server := &http.Server{

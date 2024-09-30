@@ -124,7 +124,8 @@ func UpdatePerson(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 	person := parsePerson(writer, readBody(writer, request))
-	handlers.UpdatePerson(handleParameters(request, "title"), person.Name)
+	// TODO: this will be changed, parameter is wrong.
+	handlers.UpdatePerson(handleParameters(request, "name"), person.Name)
 }
 
 func DeletePerson(writer http.ResponseWriter, request *http.Request) {
@@ -138,7 +139,7 @@ func GetTasks(writer http.ResponseWriter, request *http.Request) {
 	if !isRequestMethodValid(writer, request, http.MethodGet) {
 		return
 	}
-	tasks, err := handlers.GetPersons()
+	tasks, err := handlers.GetTasks()
 	if err != nil {
 		http.Error(writer, "Failed to get person", http.StatusInternalServerError)
 		return
@@ -184,4 +185,44 @@ func AssignTask(writer http.ResponseWriter, request *http.Request) {
 	person := parsePerson(writer, readBody(writer, request))
 	task := parseTask(writer, readBody(writer, request))
 	handlers.AssignPersonToTask(person, task)
+}
+
+func GetTasksForPerson(writer http.ResponseWriter, request *http.Request) {
+	if !isRequestMethodValid(writer, request, http.MethodPost) {
+		return
+	}
+	tasks, err := handlers.GetTasksForPerson(handleParameters(request, "name"))
+
+	if err != nil {
+		http.Error(writer, "Failed to get tasks", http.StatusInternalServerError)
+		return
+	}
+
+	// Convert []Task to []Model
+	var modelList []models.Model
+	for _, task := range tasks {
+		modelList = append(modelList, task)
+	}
+
+	createResponseForList(modelList, writer)
+}
+
+func GetPersonsForTask(writer http.ResponseWriter, request *http.Request) {
+	if !isRequestMethodValid(writer, request, http.MethodPost) {
+		return
+	}
+	tasks, err := handlers.GetPersonsForTask(handleParameters(request, "name"))
+
+	if err != nil {
+		http.Error(writer, "Failed to get tasks", http.StatusInternalServerError)
+		return
+	}
+
+	// Convert []Task to []Model
+	var modelList []models.Model
+	for _, task := range tasks {
+		modelList = append(modelList, task)
+	}
+
+	createResponseForList(modelList, writer)
 }

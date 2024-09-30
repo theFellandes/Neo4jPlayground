@@ -3,5 +3,5 @@ app:
 db:
   ip: localhost
   user: neo4j
-  password: test
+  password: TestingNeo4j
   port: 7687
