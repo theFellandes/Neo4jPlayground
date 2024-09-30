@@ -1,0 +1,7 @@
+app:
+  port: :4040
+db:
+  ip: localhost
+  user: neo4j
+  password: test
+  port: 7687

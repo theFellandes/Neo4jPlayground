@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  neo4j:
+    image: neo4j:5.6.0
+    container_name: neo4j
+    environment:
+      - NEO4J_AUTH=neo4j/test # username/password for Neo4j
+    ports:
+      - "7474:7474"   # Neo4j Browser
+      - "7687:7687"   # Bolt protocol
+    volumes:
+      - neo4j_data:/data  # persist data between container restarts
+      - neo4j_logs:/logs  # store logs
+
+volumes:
+  neo4j_data:
+  neo4j_logs:
